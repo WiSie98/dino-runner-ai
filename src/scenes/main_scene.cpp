@@ -3,27 +3,34 @@
 MainScene::MainScene() {
 	setSceneType(MAIN_SCENE);
 
-	std::ifstream tileset_description_file("./assets/levels/dk_ts_woodlandbiom.json");
+	std::ifstream tileset_description_file("./assets/levels/vp_ts_metroidlevel.json");
 	nlohmann::json tileset_description = nlohmann::json::parse(tileset_description_file);
 	tileset_description_file.close();
 
-	std::ifstream level_map_file("./assets/level/dk_lv_fin_woodlandbiom.json");
+	std::ifstream level_map_file("./assets/levels/vp_lv_metroidlevel.json");
 	nlohmann::json level_map = nlohmann::json::parse(level_map_file);
 	level_map_file.close();
 
 	this->tile_atlas_texture = LoadTexture(("./assets/graphics/tilesets/" + tileset_description["image"].get<std::string>()).c_str());
 
 	parseLevelBackgroundTiles(tileset_description, level_map);
-	parseLevelForegroundTiles(tileset_description, level_map);
+	//parseLevelForegroundTiles(tileset_description, level_map);
 	parseLevelCollider(tileset_description, level_map);
 }
 
 MainScene::~MainScene() {}
 
-void MainScene::update(MainCamera& camera) {}
+void MainScene::update(MainCamera& camera) {
+	BeginMode2D(camera.getMainCamera());
+	Vector2 pos;
+	pos.x = 0;
+	pos.y = 0;
+	camera.setTarget(pos);
+	
+}
 
 void MainScene::draw(MainCamera& camera) {
-	DrawText("Hello, world!", 10, 10, 30, LIGHTGRAY);
+	drawBackground(camera);
 }
 
 SceneType MainScene::setNextScene(bool& exitWindowRequested) {
@@ -51,6 +58,7 @@ void MainScene::drawBackground(MainCamera& camera) {
 	}
 }
 
+/*
 void MainScene::drawForeground(MainCamera& camera) {
 	Vector2 camera_position = camera.getMainCamera().target;
 	camera_position.x = camera_position.x - static_cast<float>(GetScreenWidth() / 2);
@@ -61,6 +69,7 @@ void MainScene::drawForeground(MainCamera& camera) {
 		}
 	}
 }
+*/
 
 void MainScene::parseLevelBackgroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map) {
 
@@ -70,11 +79,12 @@ void MainScene::parseLevelBackgroundTiles(nlohmann::json& tileset_description, n
 	for (auto const& layer : level_map["layers"]) {
 		if (layer["type"] == "tilelayer" && layer["visible"]) {
 			for (auto const& tileId : layer["data"]) {
-				if (layer["id"] < 8) {
+				if (layer["id"] < 3) {
 					if (tileId != 0) {
-						rec.x = static_cast<float>(((static_cast<int>(tileId) - 1) % static_cast<int>(tileset_description["columns"]))) * static_cast<float>(level_map["tilewidth"]);
+						rec.x = static_cast<float>(((static_cast<int>(tileId) -1) % static_cast<int>(tileset_description["columns"]))) * static_cast<float>(level_map["tilewidth"]);
 						rec.y = static_cast<float>(floor(static_cast<float>(tileId) / static_cast<float>(tileset_description["columns"]))) * static_cast<float>(level_map["tilewidth"]);
-						if (static_cast<int>(tileId) % 32 == 0) {
+						
+						if (static_cast<int>(tileId) % 20 == 0) {
 							rec.y -= 16;
 						}
 
@@ -102,7 +112,7 @@ void MainScene::parseLevelBackgroundTiles(nlohmann::json& tileset_description, n
 	}
 }
 
-void MainScene::parseLevelForegroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map) {
+/*void MainScene::parseLevelForegroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map) {
 	Vector2 vec = { 0, 0 };
 	Rectangle rec = { 0, 0, level_map["tilewidth"], level_map["tileheight"] };
 
@@ -136,18 +146,63 @@ void MainScene::parseLevelForegroundTiles(nlohmann::json& tileset_description, n
 		}
 
 	}
-}
+}*/
 
 void MainScene::parseLevelCollider(nlohmann::json& tileset_description, nlohmann::json& level_map) {
 	Vector2 vec = { 0, 0 };
 	Rectangle rec = { 0, 0, level_map["tilewidth"], level_map["tileheight"] };
 
 	for (auto const& layer : level_map["layers"]) {
-		if (layer["type"] == "tilelayer" && layer["id"] == 13) {
+		if (layer["type"] == "tilelayer" && layer["id"] == 3) {
 			for (auto const& tileId : layer["data"]) {
 				if (tileId != 0) {
 					std::shared_ptr<ColliderTile> collider_tile = std::make_shared<ColliderTile>();
 					collider_tile->id = 0;
+					collider_tile->collider_position = vec;
+					this->collider_vector.push_back(collider_tile);
+				}
+
+				vec.x += static_cast<float>(level_map["tilewidth"]);
+				if (vec.x >= static_cast<float>(layer["width"]) * static_cast<float>(level_map["tilewidth"])) {
+					vec.x = 0;
+					vec.y += static_cast<float>(level_map["tileheight"]);
+				}
+				if (vec.y >= static_cast<float>(layer["height"]) * static_cast<float>(level_map["tileheight"])) {
+					vec.y = 0;
+				}
+			}
+		}
+
+	}
+	for (auto const& layer : level_map["layers"]) {
+		if (layer["type"] == "tilelayer" && layer["id"] == 4) {
+			for (auto const& tileId : layer["data"]) {
+				if (tileId != 0) {
+					std::shared_ptr<ColliderTile> collider_tile = std::make_shared<ColliderTile>();
+					collider_tile->id = 1;
+					collider_tile->collider_position = vec;
+					this->collider_vector.push_back(collider_tile);
+				}
+
+				vec.x += static_cast<float>(level_map["tilewidth"]);
+				if (vec.x >= static_cast<float>(layer["width"]) * static_cast<float>(level_map["tilewidth"])) {
+					vec.x = 0;
+					vec.y += static_cast<float>(level_map["tileheight"]);
+				}
+				if (vec.y >= static_cast<float>(layer["height"]) * static_cast<float>(level_map["tileheight"])) {
+					vec.y = 0;
+				}
+			}
+		}
+
+	}
+
+	for (auto const& layer : level_map["layers"]) {
+		if (layer["type"] == "tilelayer" && layer["id"] == 5) {
+			for (auto const& tileId : layer["data"]) {
+				if (tileId != 0) {
+					std::shared_ptr<ColliderTile> collider_tile = std::make_shared<ColliderTile>();
+					collider_tile->id = 2;
 					collider_tile->collider_position = vec;
 					this->collider_vector.push_back(collider_tile);
 				}

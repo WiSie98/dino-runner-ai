@@ -31,7 +31,7 @@ int main() {
     GenerateScenes(&sceneManager.getScenes());
     sceneManager.switchToScene(START_SCENE);
 
-    MainCamera mainCamera(1.0f, 0.0f);
+    MainCamera mainCamera(2.0f, 0.0f);
 
     // Main game loop
     while (!exitWindow) {
