@@ -7,6 +7,9 @@ public:
 
 	void setIsDead(bool isDead);
 	void setTraverseSpeed(float traverse_speed);
+	void setJumpSpeed(float jump_speed);
+	void setCurrentSpeed(float speed_x, float speed_y);
+	void setCurrentSpeed(Vector2 current_speed);
 	void setCurrentPosition(Vector2 position);
 	void setCurrentPosition(float pos_x, float pos_y);
 	void setLastPosition(Vector2 position);
@@ -15,6 +18,8 @@ public:
 
 	bool getIsDead();
 	float getTraverseSpeed();
+	float getJumpSpeed();
+	Vector2 getCurrentSpeed();
 	Vector2 getCurrentPosition();
 	Vector2 getLastPosition();
 	Texture2D getTexture();
@@ -28,6 +33,8 @@ protected:
 
 	bool isDead;
 	float traverse_speed;
+	float jump_speed;
+	Vector2 current_speed;
 	Vector2 current_position;
 	Vector2 last_position;
 	Texture2D texture;
