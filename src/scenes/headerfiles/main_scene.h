@@ -10,9 +10,9 @@ public:
 
 	~MainScene();
 
-	void update(MainCamera& camera) override;
-	void draw(MainCamera& camera) override;
-	SceneType setNextScene(bool& exitWindowRequested) override;
+	void update(ActorPlayer& player, MainCamera& camera) override;
+	void draw(ActorPlayer& player, MainCamera& camera) override;
+	SceneType setNextScene(ActorPlayer& player, bool& exitWindowRequested) override;
 
 	void drawBackground(MainCamera& camera);
 	void drawForeground(MainCamera& camera);
@@ -21,7 +21,7 @@ public:
 	void parseLevelForegroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map);
 	void parseLevelCollider(nlohmann::json& tileset_description, nlohmann::json& level_map);
 
-	void detectCollision(MainCamera& camera);
+	void detectCollision(ActorPlayer& player, MainCamera& camera);
 
 private:
 

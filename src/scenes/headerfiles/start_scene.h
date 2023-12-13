@@ -10,9 +10,9 @@ public:
 
     ~StartScene();
 
-    void update(MainCamera& camera) override;
-    void draw(MainCamera& camera) override;
-    SceneType setNextScene(bool& exitWindowRequested) override;
+    void update(ActorPlayer& player, MainCamera& camera) override;
+    void draw(ActorPlayer& player, MainCamera& camera) override;
+    SceneType setNextScene(ActorPlayer& player, bool& exitWindowRequested) override;
 
     void updateAnimatedLogo();
     void drawAnimatedLogo();

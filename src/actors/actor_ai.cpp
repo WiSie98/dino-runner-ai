@@ -92,10 +92,6 @@ float ActorAI::tanhFunction(float x) {
 
 //----------------------------Setter----------------------------------
 
-void ActorAI::setIsStanding(bool is_standing) {
-	this->is_standing = is_standing;
-}
-
 void ActorAI::setFitness(float fitness) {
 	this->fitness = fitness;
 }
@@ -113,10 +109,6 @@ void ActorAI::setNearestPlatformBeneathDistance(float nearest_platform_beneath_d
 }
 
 //----------------------------Getter----------------------------------
-
-bool ActorAI::getIsStanding() {
-	return this->is_standing;
-}
 
 float ActorAI::getFitness() {
 	return this->fitness;

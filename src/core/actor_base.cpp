@@ -6,12 +6,20 @@ void ActorBase::setIsDead(bool isDead) {
 	this->isDead = isDead;
 }
 
+void ActorBase::setIsStanding(bool is_standing) {
+	this->is_standing = is_standing;
+}
+
 void ActorBase::setTraverseSpeed(float traverse_speed) {
 	this->traverse_speed = traverse_speed;
 }
 
 void ActorBase::setJumpSpeed(float jump_speed) {
 	this->jump_speed = jump_speed;
+}
+
+void ActorBase::setJumpVelocity(float jump_velocity) {
+	this->jump_velocity = jump_velocity;
 }
 
 void ActorBase::setCurrentSpeed(float speed_x, float speed_y) {
@@ -51,12 +59,20 @@ bool ActorBase::getIsDead() {
 	return this->isDead;
 }
 
+bool ActorBase::getIsStanding() {
+	return this->is_standing;
+}
+
 float ActorBase::getTraverseSpeed() {
 	return this->traverse_speed;
 }
 
 float ActorBase::getJumpSpeed() {
 	return this->jump_speed;
+}
+
+float ActorBase::getJumpVelocity() {
+	return this->jump_velocity;
 }
 
 Vector2 ActorBase::getCurrentSpeed() {

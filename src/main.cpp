@@ -6,6 +6,7 @@
 #include "core/headerfiles/header.h"
 #include "scenes/headerfiles/scenes.h"
 #include "core/headerfiles/scene_manager.h"
+#include "actors/headerfiles/actor_player.h"
 #include "core/headerfiles/camera.h"
 
 int main() {
@@ -25,11 +26,13 @@ int main() {
 #endif
 
     // Your own initialization code here
-    Texture2D myTexture = LoadTexture("assets/graphics/testimage.png");
+    Texture2D actor_texture = LoadTexture("assets/graphics/spritesheets/vp_sptsht_player.png");
 
     SceneManager sceneManager;
     GenerateScenes(&sceneManager.getScenes());
     sceneManager.switchToScene(START_SCENE);
+
+    ActorPlayer player(STARTPOSITION.x, STARTPOSITION.y, actor_texture);
 
     MainCamera mainCamera(2.0f, 0.0f);
 
@@ -40,19 +43,19 @@ int main() {
             exitWindow = true;
         }
 
-        sceneManager.switchToScene(sceneManager.getCurrentScene()->setNextScene(exitWindowRequested));
-        sceneManager.update(mainCamera);
+        sceneManager.switchToScene(sceneManager.getCurrentScene()->setNextScene(player, exitWindowRequested));
+        sceneManager.update(player, mainCamera);
 
         BeginDrawing();
             // You can draw on the screen between BeginDrawing() and EndDrawing()
             ClearBackground(WHITE);
-            sceneManager.draw(mainCamera);
+            sceneManager.draw(player, mainCamera);
 
         EndDrawing();
     } // Main game loop end
 
     // De-initialization here
-    UnloadTexture(myTexture);
+    UnloadTexture(actor_texture);
 
     // Close window and OpenGL context
     CloseWindow();

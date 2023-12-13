@@ -2,6 +2,7 @@
 
 #include "header.h"
 #include "camera.h"
+#include "../../actors/headerfiles/actor_player.h"
 
 class Scene {
 
@@ -10,10 +11,10 @@ public:
 	void setSceneType(SceneType scene_type);
 	SceneType getSceneType();
 
-	virtual void update(MainCamera& camera) = 0;
-	virtual void draw(MainCamera& camera) = 0;
+	virtual void update(ActorPlayer& player, MainCamera& camera) = 0;
+	virtual void draw(ActorPlayer& player, MainCamera& camera) = 0;
 
-	virtual SceneType setNextScene(bool& exitWindowRequested) = 0;
+	virtual SceneType setNextScene(ActorPlayer& player, bool& exitWindowRequested) = 0;
 
 private:
 

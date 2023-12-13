@@ -18,13 +18,11 @@ public:
 	float sigmoidFunction(float x);
 	float tanhFunction(float x);
 
-	void setIsStanding(bool is_standing);
 	void setFitness(float fitness);
 	void setNearestPlatformEdge(float nearest_platform_edge);
 	void setNearestPlatformDistance(float nearest_platform_distance);
 	void setNearestPlatformBeneathDistance(float nearest_platform_beneath_distance);
 
-	bool getIsStanding();
 	float getFitness();
 	float getNearestPlatformEdge();
 	float getNearestPlatformDistance();
@@ -38,7 +36,6 @@ private:
 
 protected:
 
-	bool is_standing;
 	float fitness;
 	float nearest_platform_edge;
 	float nearest_platform_distance;

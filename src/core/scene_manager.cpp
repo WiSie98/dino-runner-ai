@@ -12,12 +12,12 @@ void SceneManager::switchToScene(SceneType scene_type) {
 	}
 }
 
-void SceneManager::update(MainCamera& camera) {
-	this->current_scene->update(camera);
+void SceneManager::update(ActorPlayer& player, MainCamera& camera) {
+	this->current_scene->update(player, camera);
 }
 
-void SceneManager::draw(MainCamera& camera) {
-	this->current_scene->draw(camera);
+void SceneManager::draw(ActorPlayer& player, MainCamera& camera) {
+	this->current_scene->draw(player, camera);
 }
 
 //----------------------------Getter----------------------------------

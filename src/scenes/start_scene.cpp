@@ -6,15 +6,15 @@ StartScene::StartScene() {
 
 StartScene::~StartScene() {}
 
-void StartScene::update(MainCamera& camera) {
+void StartScene::update(ActorPlayer& player, MainCamera& camera) {
     updateAnimatedLogo();
 }
 
-void StartScene::draw(MainCamera& camera) {
+void StartScene::draw(ActorPlayer& player, MainCamera& camera) {
     drawAnimatedLogo();
 }
 
-SceneType StartScene::setNextScene(bool& exitWindowRequested) {
+SceneType StartScene::setNextScene(ActorPlayer& player, bool& exitWindowRequested) {
     if (this->is_finished || IsKeyPressed(KEY_SPACE)) {
 
         this->is_finished = false;
