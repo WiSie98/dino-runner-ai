@@ -6,7 +6,7 @@
 class ActorPlayer final : public ActorBase {
 public:
 	
-	ActorPlayer(float position_x, float position_y, Texture2D texture);
+	ActorPlayer(bool is_active, Texture2D texture);
 
 	~ActorPlayer() {};
 

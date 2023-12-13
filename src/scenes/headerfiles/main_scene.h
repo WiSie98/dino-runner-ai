@@ -10,18 +10,19 @@ public:
 
 	~MainScene();
 
-	void update(ActorPlayer& player, MainCamera& camera) override;
-	void draw(ActorPlayer& player, MainCamera& camera) override;
-	SceneType setNextScene(ActorPlayer& player, bool& exitWindowRequested) override;
+	void update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) override;
+	void draw(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) override;
+	SceneType setNextScene(ActorPlayer& player, std::vector<ActorAI>& ai_vector, bool& exitWindowRequested) override;
 
 	void drawBackground(MainCamera& camera);
-	void drawForeground(MainCamera& camera);
+	//void drawForeground(MainCamera& camera);
 
 	void parseLevelBackgroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map);
-	void parseLevelForegroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map);
+	//void parseLevelForegroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map);
 	void parseLevelCollider(nlohmann::json& tileset_description, nlohmann::json& level_map);
 
-	void detectCollision(ActorPlayer& player, MainCamera& camera);
+	void detectPlayerCollision(ActorPlayer& player, MainCamera& camera);
+	void detectAICollision(std::vector<ActorAI>& ai_vector, MainCamera& camera);
 
 private:
 

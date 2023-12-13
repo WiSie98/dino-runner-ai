@@ -7,22 +7,23 @@
 class ActorAI final : public ActorBase {
 public:
 
-	ActorAI(float start_position_x, float start_position_y, int num_inputs, int num_hidden, int num_outputs);
+	ActorAI(bool is_active, int num_inputs, int num_hidden, int num_outputs, Texture texture);
 
 	~ActorAI();
 
 	void update();
 	void draw();
 
-	void activationFunction();
 	float sigmoidFunction(float x);
 	float tanhFunction(float x);
 
+	void setId(int id);
 	void setFitness(float fitness);
 	void setNearestPlatformEdge(float nearest_platform_edge);
 	void setNearestPlatformDistance(float nearest_platform_distance);
 	void setNearestPlatformBeneathDistance(float nearest_platform_beneath_distance);
 
+	int getId();
 	float getFitness();
 	float getNearestPlatformEdge();
 	float getNearestPlatformDistance();
@@ -32,16 +33,19 @@ public:
 
 private:
 
-	
+	void activationFunction();
+	void fillInputs();
+	void aiMovement();
 
 protected:
 
+	int id;
 	float fitness;
 	float nearest_platform_edge;
 	float nearest_platform_distance;
 	float nearest_platform_beneath_distance;
 
-	std::vector<std::vector<Synapse>> synapse_vector_hl1; //Inputs müssen bei der Initialisierung mit Null und die weights mit einem zufälligen float befült werden. hl1 -> hidden layer 1, OL -> output layer
+	std::vector<std::vector<Synapse>> synapse_vector_hl1; //Inputs müssen bei der Initialisierung mit Null und die weights mit einem zufälligen float befüllt werden. hl1 -> hidden layer 1, OL -> output layer
 	std::vector<std::vector<Synapse>> synapse_vector_ol;
 	std::vector<float> synapse_out_hl1;
 	std::vector<float> synapse_out_ol;

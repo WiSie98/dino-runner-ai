@@ -1,14 +1,15 @@
 #include "headerfiles/actor_player.h"
 
-ActorPlayer::ActorPlayer(float position_x, float position_y, Texture2D texture) {
+ActorPlayer::ActorPlayer(bool is_active, Texture2D texture) {
 	setIsDead(false);
+	setIsActive(is_active);
 	setIsStanding(true);
 	setTraverseSpeed(TRAVERSESPEED);
 	setJumpSpeed(JUMPSPEED);
 	setJumpVelocity(0);
 	setCurrentSpeed(0, 0);
-	setCurrentPosition(position_x, position_y);
-	setLastPosition(position_x, position_y);
+	setCurrentPosition(STARTPOSITION);
+	setLastPosition(STARTPOSITION);
 	setTexture(texture);
 }
 

@@ -6,6 +6,10 @@ void ActorBase::setIsDead(bool isDead) {
 	this->isDead = isDead;
 }
 
+void ActorBase::setIsActive(bool is_active) {
+	this->is_active = is_active;
+}
+
 void ActorBase::setIsStanding(bool is_standing) {
 	this->is_standing = is_standing;
 }
@@ -57,6 +61,10 @@ void ActorBase::setTexture(Texture2D texture) {
 
 bool ActorBase::getIsDead() {
 	return this->isDead;
+}
+
+bool ActorBase::getIsActive() {
+	return this->is_active;
 }
 
 bool ActorBase::getIsStanding() {

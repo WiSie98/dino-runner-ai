@@ -6,15 +6,15 @@ StartScene::StartScene() {
 
 StartScene::~StartScene() {}
 
-void StartScene::update(ActorPlayer& player, MainCamera& camera) {
+void StartScene::update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) {
     updateAnimatedLogo();
 }
 
-void StartScene::draw(ActorPlayer& player, MainCamera& camera) {
+void StartScene::draw(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) {
     drawAnimatedLogo();
 }
 
-SceneType StartScene::setNextScene(ActorPlayer& player, bool& exitWindowRequested) {
+SceneType StartScene::setNextScene(ActorPlayer& player, std::vector<ActorAI>& ai_vector, bool& exitWindowRequested) {
     if (this->is_finished || IsKeyPressed(KEY_SPACE)) {
 
         this->is_finished = false;

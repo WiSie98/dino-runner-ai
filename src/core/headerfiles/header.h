@@ -13,6 +13,7 @@
 #include "raylib.h"
 #include "json.hpp"
 
+constexpr int NUMOFAI = 50;
 constexpr float GRAVITY = 0.1f;
 constexpr float TRAVERSESPEED = 3.0f;
 constexpr float JUMPSPEED = -6.0f;

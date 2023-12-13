@@ -13,8 +13,8 @@ public:
 
 	void switchToScene(SceneType scene_type);
 
-	void update(ActorPlayer& player, MainCamera& camera);
-	void draw(ActorPlayer& player, MainCamera& camera);
+	void update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera);
+	void draw(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera);
 
 	std::shared_ptr<Scene> getCurrentScene();
 	std::vector<std::shared_ptr<Scene>>& getScenes();

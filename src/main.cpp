@@ -7,6 +7,7 @@
 #include "scenes/headerfiles/scenes.h"
 #include "core/headerfiles/scene_manager.h"
 #include "actors/headerfiles/actor_player.h"
+#include "actors/headerfiles/actor_ai.h"
 #include "core/headerfiles/camera.h"
 
 int main() {
@@ -32,9 +33,15 @@ int main() {
     GenerateScenes(&sceneManager.getScenes());
     sceneManager.switchToScene(START_SCENE);
 
-    ActorPlayer player(STARTPOSITION.x, STARTPOSITION.y, actor_texture);
-
+    ActorPlayer player(false, actor_texture);
     MainCamera mainCamera(2.0f, 0.0f);
+
+    std::vector<ActorAI> ai_vector;
+
+    for (int i = 0; i < NUMOFAI; i++) {
+        ActorAI ai(true, 4, 8, 3, actor_texture);
+        ai_vector.push_back(ai);
+    }
 
     // Main game loop
     while (!exitWindow) {
@@ -43,13 +50,13 @@ int main() {
             exitWindow = true;
         }
 
-        sceneManager.switchToScene(sceneManager.getCurrentScene()->setNextScene(player, exitWindowRequested));
-        sceneManager.update(player, mainCamera);
+        sceneManager.switchToScene(sceneManager.getCurrentScene()->setNextScene(player, ai_vector, exitWindowRequested));
+        sceneManager.update(player, ai_vector, mainCamera);
 
         BeginDrawing();
             // You can draw on the screen between BeginDrawing() and EndDrawing()
-            ClearBackground(WHITE);
-            sceneManager.draw(player, mainCamera);
+            ClearBackground(BLACK);
+            sceneManager.draw(player, ai_vector, mainCamera);
 
         EndDrawing();
     } // Main game loop end

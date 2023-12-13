@@ -6,6 +6,7 @@ class ActorBase {
 public:
 
 	void setIsDead(bool isDead);
+	void setIsActive(bool is_active);
 	void setIsStanding(bool is_standing);
 	void setTraverseSpeed(float traverse_speed);
 	void setJumpSpeed(float jump_speed);
@@ -19,6 +20,7 @@ public:
 	void setTexture(Texture2D texture);
 
 	bool getIsDead();
+	bool getIsActive();
 	bool getIsStanding();
 	float getTraverseSpeed();
 	float getJumpSpeed();
@@ -36,6 +38,7 @@ private:
 protected:
 
 	bool isDead;
+	bool is_active;
 	bool is_standing;
 	float traverse_speed;
 	float jump_speed;

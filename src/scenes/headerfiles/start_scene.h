@@ -10,9 +10,9 @@ public:
 
     ~StartScene();
 
-    void update(ActorPlayer& player, MainCamera& camera) override;
-    void draw(ActorPlayer& player, MainCamera& camera) override;
-    SceneType setNextScene(ActorPlayer& player, bool& exitWindowRequested) override;
+    void update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) override;
+    void draw(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) override;
+    SceneType setNextScene(ActorPlayer& player, std::vector<ActorAI>& ai_vector, bool& exitWindowRequested) override;
 
     void updateAnimatedLogo();
     void drawAnimatedLogo();
