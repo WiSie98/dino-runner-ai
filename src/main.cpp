@@ -33,7 +33,7 @@ int main() {
     GenerateScenes(&sceneManager.getScenes());
     sceneManager.switchToScene(START_SCENE);
 
-    ActorPlayer player(false, actor_texture);
+    ActorPlayer player(STARTASPLAYER, actor_texture);
     MainCamera mainCamera(2.0f, 0.0f);
 
     std::vector<ActorAI> ai_vector;

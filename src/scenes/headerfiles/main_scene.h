@@ -22,7 +22,7 @@ public:
 	void parseLevelCollider(nlohmann::json& tileset_description, nlohmann::json& level_map);
 
 	void detectPlayerCollision(ActorPlayer& player, MainCamera& camera);
-	void detectAICollision(std::vector<ActorAI>& ai_vector, MainCamera& camera);
+	void detectAICollision(ActorAI& ai);
 
 private:
 

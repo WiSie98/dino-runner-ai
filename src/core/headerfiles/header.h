@@ -13,10 +13,14 @@
 #include "raylib.h"
 #include "json.hpp"
 
+constexpr bool STARTASPLAYER = false;
 constexpr int NUMOFAI = 50;
+constexpr int TIMEPERGENERATION = 0;
 constexpr float GRAVITY = 0.1f;
 constexpr float TRAVERSESPEED = 3.0f;
 constexpr float JUMPSPEED = -6.0f;
+constexpr float MINWEIGHT = -1.0f;
+constexpr float MAXWEIGHT = 1.0f;
 constexpr Vector2 STARTPOSITION = { 240.0f, 3194.0f };
 
 enum SceneType { START_SCENE, MAIN_SCENE };

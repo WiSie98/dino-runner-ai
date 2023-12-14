@@ -23,7 +23,7 @@ ActorAI::ActorAI(bool is_active, int num_inputs, int num_hidden, int num_outputs
 		this->synapse_vector_hl1[i].resize(num_inputs);
 
 		for (int j = 0; j < num_inputs - 1; j++) {
-			float random = -2.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2.0f - -2.0f)));
+			float random = MINWEIGHT + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (MAXWEIGHT - MINWEIGHT)));
 
 			Synapse synapse;
 			synapse.input = 0;
@@ -52,14 +52,13 @@ ActorAI::ActorAI(bool is_active, int num_inputs, int num_hidden, int num_outputs
 ActorAI::~ActorAI() {}
 
 void ActorAI::update() {
-	//Davor müssen noch die Inputs für die ersten Synapsen berechnet und übergeben werden.
 	if (!getIsDead()) {
 		fillInputs();
 		activationFunction();
 		aiMovement();
 
-		if (this->fitness < this->current_position.y) {
-			this->fitness = this->current_position.y;
+		if (this->fitness < (this->current_position.y * -1) + STARTPOSITION.y) {
+			this->fitness = ((this->current_position.y * -1) + STARTPOSITION.y);
 		}
 	}
 	if (!getIsStanding()) {
@@ -101,7 +100,7 @@ void ActorAI::activationFunction() {
 		}
 	}
 
-
+	
 	//Calculates the summ of all nodes for the output layer and applys the activation function to the outputs.
 	for (int i = 0; i < this->synapse_vector_ol.size() - 1; i++) {
 		for (int j = 0; j < this->synapse_vector_ol[i].size() - 1; j++) {
@@ -109,9 +108,9 @@ void ActorAI::activationFunction() {
 		}
 
 		this->synapse_out_ol[i] = tanhFunction(sum);
-		std::cout << sum;
 		sum = 0;
 	}
+	//std::cout << " " << this->synapse_out_ol[0];
 }
 
 float ActorAI::sigmoidFunction(float x) {
@@ -139,34 +138,42 @@ void ActorAI::fillInputs() {
 		}
 
 		//Input of nearest_platform_edge
-		if (this->nearest_platform_edge > 192) {
-			this->synapse_vector_hl1[i][1].input = -1;
-		} else if (this->nearest_platform_edge == 0) {
-			this->synapse_vector_hl1[i][1].input = 1;
-		} else {
-			this->synapse_vector_hl1[i][1].input = (this->nearest_platform_edge / 96 - 1) * -1;
+		if (this->nearest_platform_edge > 192.0f || this->nearest_platform_edge < -192.0f) {
+			this->synapse_vector_hl1[i][1].input = -1.0f;
+		} else if (this->nearest_platform_edge == 0.0f) {
+			this->synapse_vector_hl1[i][1].input = 1.0f;
+		} else if (0.0f < this->nearest_platform_edge && this->nearest_platform_edge <= 192.0f) {
+			this->synapse_vector_hl1[i][1].input = (this->nearest_platform_edge / 96.0f - 1.0f) * -1.0f;
+		} else if (0.0f > this->nearest_platform_edge && this->nearest_platform_edge >= -192.0f) {
+			this->synapse_vector_hl1[i][1].input = (this->nearest_platform_edge / -96.0f - 1.0f) * -1.0f;
+			//std::cout << " " << this->nearest_platform_edge;
+			//std::cout << " " << this->synapse_vector_hl1[i][1].input;
 		}
 
 		//Input of nearest_platform_distance
-		if (this->nearest_platform_distance > 256) {
-			this->synapse_vector_hl1[i][2].input = -1;
-		}
-		else if (this->nearest_platform_distance == 0) {
-			this->synapse_vector_hl1[i][2].input = 1;
-		}
-		else {
-			this->synapse_vector_hl1[i][2].input = (this->nearest_platform_distance / 128 - 1) * -1;
+		if (this->nearest_platform_distance > 256.0f || this->nearest_platform_distance < -256.0f) {
+			this->synapse_vector_hl1[i][2].input = -1.0f;
+		} else if (this->nearest_platform_distance == 0.0f) {
+			this->synapse_vector_hl1[i][2].input = 1.0f;
+		} else if (0.0f < this->nearest_platform_distance && this->nearest_platform_distance <= 256.0f) {
+			this->synapse_vector_hl1[i][2].input = (this->nearest_platform_distance / 128.0f - 1.0f) * -1.0f;
+		} else if (0.0f > this->nearest_platform_distance && this->nearest_platform_distance >= -256.0f) {
+			this->synapse_vector_hl1[i][2].input = (this->nearest_platform_distance / -128.0f - 1.0f) * -1.0f;
+			//std::cout << " " << this->nearest_platform_distance;
+			//std::cout << " " << this->synapse_vector_hl1[i][2].input;
 		}
 
 		//Input of nearest_platform_beneath_distance
-		if (this->nearest_platform_beneath_distance > 512) {
-			this->synapse_vector_hl1[i][3].input = -1;
-		}
-		else if (this->nearest_platform_beneath_distance == 0) {
-			this->synapse_vector_hl1[i][3].input = 1;
-		}
-		else {
-			this->synapse_vector_hl1[i][3].input = (this->nearest_platform_beneath_distance / 256 - 1) * -1;
+		if (this->nearest_platform_beneath_distance > 512.0f) {
+			this->synapse_vector_hl1[i][3].input = -1.0f;
+		} else if (this->nearest_platform_beneath_distance == 0.0f) {
+			this->synapse_vector_hl1[i][3].input = 1.0f;
+		} else if (0.0f < this->nearest_platform_beneath_distance && this->nearest_platform_beneath_distance <= 512.0f) {
+			this->synapse_vector_hl1[i][3].input = (this->nearest_platform_beneath_distance / 256.0f - 1.0f) * -1.0f;
+		} else if (0.0f > this->nearest_platform_beneath_distance && this->nearest_platform_beneath_distance >= -512.0f) {
+			this->synapse_vector_hl1[i][3].input = (this->nearest_platform_beneath_distance / -256.0f - 1.0f) * -1.0f;
+			//std::cout << " " << this->nearest_platform_beneath_distance;
+			//std::cout << " " << this->synapse_vector_hl1[i][3].input;
 		}
 	}
 }
@@ -175,12 +182,15 @@ void ActorAI::aiMovement() {
 	if (getIsStanding() && synapse_out_ol[0] > 0) {
 		this->jump_velocity = this->jump_speed;
 		setIsStanding(false);
+		//std::cout << " Jump";
 	}
 	if (synapse_out_ol[1] > 0) {
 		this->current_position.x = this->current_position.x + this->traverse_speed;
+		//std::cout << " Right";
 	}
 	if (synapse_out_ol[2] > 0) {
 		this->current_position.x = this->current_position.x - this->traverse_speed;
+		//std::cout << " Left";
 	}
 }
 

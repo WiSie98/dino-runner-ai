@@ -22,14 +22,15 @@ MainScene::~MainScene() {}
 
 void MainScene::update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) {
 	Vector2 vec = {STARTPOSITION.x, 0};
-	if (player.getIsActive()) {
+	int temp_fitness = 0;
+	if (STARTASPLAYER) {
 		player.update();
 		detectPlayerCollision(player, camera);
-		//detectAICollision(ai_vector, camera);
 		camera.setTarget(player.getCurrentPosition());
 	} else {
-		for (int i = 0; i < ai_vector.size() - 1; i++) {
-			if (vec.y < ai_vector[i].getCurrentPosition().y) {
+		for (int i = 0; i <= ai_vector.size() - 1; i++) {
+			if (temp_fitness < ai_vector[i].getFitness()) {
+				temp_fitness = ai_vector[i].getFitness();
 				vec.y = ai_vector[i].getCurrentPosition().y;
 			}
 		}
@@ -37,11 +38,12 @@ void MainScene::update(ActorPlayer& player, std::vector<ActorAI>& ai_vector, Mai
 	}
 
 	for (int i = 0; i < ai_vector.size() - 1; i++) {
-		ai_vector[i].setIsStanding(GetRandomValue(0, 1));
 		ai_vector[i].setNearestPlatformEdge(GetRandomValue(-256, 256));
 		ai_vector[i].setNearestPlatformDistance(GetRandomValue(-512, 512));
 		ai_vector[i].setNearestPlatformBeneathDistance(GetRandomValue(-1024, 1024));
+
 		ai_vector[i].update();
+		detectAICollision(ai_vector[i]);
 	}
 
 }
@@ -311,48 +313,45 @@ void MainScene::detectPlayerCollision(ActorPlayer& player, MainCamera& camera) {
 	player.setLastPosition(player.getCurrentPosition());
 }
 
-/*void detectAICollision(std::vector<ActorAI>& ai_vector, MainCamera& camera) {
+void MainScene::detectAICollision(ActorAI& ai) {
 
 	bool is_collision = false;
-	Vector2 camera_position = camera.getMainCamera().target;
-	camera_position.x = camera_position.x - static_cast<float>(GetScreenWidth() / 2);
-	camera_position.y = camera_position.y - static_cast<float>(GetScreenHeight() / 2);
 
-	Rectangle player_rec = { player.getCurrentPosition().x, player.getCurrentPosition().y, 16, 32 };
 	Rectangle collider_rec = { 0, 0, 16, 16 };
 	for (const auto& tile : this->collider_vector) {
 
-		collider_rec.x = tile->collider_position.x;
-		collider_rec.y = tile->collider_position.y;
+			Rectangle ai_rec = { ai.getCurrentPosition().x, ai.getCurrentPosition().y, 16, 32};
+			collider_rec.x = tile->collider_position.x;
+			collider_rec.y = tile->collider_position.y;
 
-		if (camera_position.x < collider_rec.x && collider_rec.x < camera_position.x + static_cast<float>(GetScreenWidth()) && camera_position.y < collider_rec.y && collider_rec.y < camera_position.y + static_cast<float>(GetScreenHeight())) {
-			if (tile->id == 0 || tile->id == 1) {
-				if (CheckCollisionRecs(player_rec, collider_rec)) {
-					if (tile->collider_position.y < player.getCurrentPosition().y) { //Test if the platform is above the player
-						player.setJumpVelocity(0);
-						player.setCurrentPosition(player.getLastPosition());
+			if (ai.getCurrentPosition().x - 128 < collider_rec.x && collider_rec.x < ai.getCurrentPosition().x + 128 && ai.getCurrentPosition().y - 128 < collider_rec.y && collider_rec.y < ai.getCurrentPosition().y + 128) {
+				if (tile->id == 0 || tile->id == 1) {
+					if (CheckCollisionRecs(ai_rec, collider_rec)) {
+						if (tile->collider_position.y < ai.getCurrentPosition().y) { //Test if the platform is above the ai
+							ai.setJumpVelocity(0);
+							ai.setCurrentPosition(ai.getLastPosition());
+						}
+						else if (tile->collider_position.y > ai.getCurrentPosition().y + 32 || tile->collider_position.y + 16 > ai.getCurrentPosition().y + 32) { //Test if the platform is under the ai
+							ai.setJumpVelocity(0);
+							ai.setCurrentPosition(ai.getCurrentPosition().x, tile->collider_position.y - 32);
+							ai.setIsStanding(true);
+						}
+						else if (tile->collider_position.x < ai.getCurrentPosition().x || tile->collider_position.x > ai.getCurrentPosition().x + 16) { //Test if the platform is at the sides the ai
+							ai.setIsStanding(false);
+							ai.setCurrentPosition(ai.getLastPosition());
+						}
+						is_collision = true;
 					}
-					else if (tile->collider_position.y > player.getCurrentPosition().y + 32 || tile->collider_position.y + 16 > player.getCurrentPosition().y + 32) { //Test if the platform is under the player
-						player.setJumpVelocity(0);
-						player.setCurrentPosition(player.getCurrentPosition().x, tile->collider_position.y - 32);
-						player.setIsStanding(true);
+					else if (is_collision == false) {
+						ai.setIsStanding(false);
 					}
-					else if (tile->collider_position.x < player.getCurrentPosition().x || tile->collider_position.x > player.getCurrentPosition().x + 16) { //Test if the platform is at the sides the player
-						player.setIsStanding(false);
-						player.setCurrentPosition(player.getLastPosition());
-					}
-					is_collision = true;
 				}
-				else if (is_collision == false) {
-					player.setIsStanding(false);
-				}
-			}
-			else if (tile->id == 2) {
-				if (CheckCollisionRecs(player_rec, collider_rec)) {
-					player.setIsDead(true);
+				else if (tile->id == 2) {
+					if (CheckCollisionRecs(ai_rec, collider_rec)) {
+						ai.setIsDead(true);
+					}
 				}
 			}
 		}
-	}
-	player.setLastPosition(player.getCurrentPosition());
-}*/
+	ai.setLastPosition(ai.getCurrentPosition());
+}
