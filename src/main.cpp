@@ -39,7 +39,7 @@ int main() {
     std::vector<ActorAI> ai_vector;
 
     for (int i = 0; i < NUMOFAI; i++) {
-        ActorAI ai(true, 4, 8, 3, actor_texture);
+        ActorAI ai(true, NUMINPUTS, NUMHIDDEN, NUMOUTPUTS, actor_texture);
         ai_vector.push_back(ai);
     }
 

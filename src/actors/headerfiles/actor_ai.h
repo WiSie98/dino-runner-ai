@@ -29,6 +29,7 @@ public:
 	float getNearestPlatformDistance();
 	float getNearestPlatformBeneathDistance();
 	std::vector<std::vector<Synapse>>& getSynapseVectorHL1();
+	std::vector<std::vector<Synapse>>& getSynapseVectorOL();
 	std::vector<float>& getSynapseOutHL1();
 
 private:

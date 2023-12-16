@@ -23,8 +23,15 @@ public:
 
 	void detectPlayerCollision(ActorPlayer& player, MainCamera& camera);
 	void detectAICollision(ActorAI& ai);
+	void geneticAlgorithm(std::vector<ActorAI>& ai_vector);
+
+	Output findRightEdge(int iterator, float tile_position_x);
 
 private:
+
+	int temp_fitness = 0;
+	int generation_time = 0;
+	int generation_counter = 0;
 
 	Texture2D tile_atlas_texture;
 	LevelTile woodland_tiles;
