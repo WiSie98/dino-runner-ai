@@ -53,7 +53,6 @@ ActorAI::~ActorAI() {}
 
 void ActorAI::update() {
 	if (!getIsDead()) {
-		fillInputs();
 		activationFunction();
 		aiMovement();
 
@@ -86,7 +85,7 @@ void ActorAI::activationFunction() {
 	//Calculates the sum of all nodes for the first hidden layer and applys the activation function to the outputs.
 	for (int i = 0; i < this->synapse_vector_hl1.size() - 1; i++) {
 		for (int j = 0; j < this->synapse_vector_hl1[i].size() - 1; j++) {
-			sum += this->synapse_vector_hl1[i][j].input * this->synapse_vector_hl1[i][j].weight; //Der Bias fehlt pro Synapse
+			sum += this->synapse_vector_hl1[i][j].input * this->synapse_vector_hl1[i][j].weight + BIAS;
 		}
 
 		this->synapse_out_hl1[i] = tanhFunction(sum);
@@ -104,7 +103,7 @@ void ActorAI::activationFunction() {
 	//Calculates the sum of all nodes for the output layer and applys the activation function to the outputs.
 	for (int i = 0; i < this->synapse_vector_ol.size() - 1; i++) {
 		for (int j = 0; j < this->synapse_vector_ol[i].size() - 1; j++) {
-			sum += this->synapse_vector_ol[i][j].input * this->synapse_vector_ol[i][j].weight; //Der Bias fehlt pro Synapse
+			sum += this->synapse_vector_ol[i][j].input * this->synapse_vector_ol[i][j].weight + BIAS;
 		}
 
 		this->synapse_out_ol[i] = tanhFunction(sum);
@@ -122,50 +121,9 @@ float ActorAI::tanhFunction(float x) {
 	return tanh;
 }
 
-void ActorAI::fillInputs() {
+void ActorAI::fillInputs(int input_pos, float value) {
 	for (int i = 0; i < synapse_vector_hl1.size() - 1; i++) {
-		//Input of is_standing
-		switch (this->is_standing) {
-		case true:
-			this->synapse_vector_hl1[i][0].input = 1;
-			break;
-		case false:
-			this->synapse_vector_hl1[i][0].input = -1;
-			break;
-		}
-
-		//Input of nearest_platform_edge
-		if (this->nearest_platform_edge > 192.0f || this->nearest_platform_edge < -192.0f) {
-			this->synapse_vector_hl1[i][1].input = -1.0f;
-		} else if (this->nearest_platform_edge == 0.0f) {
-			this->synapse_vector_hl1[i][1].input = 1.0f;
-		} else if (0.0f < this->nearest_platform_edge && this->nearest_platform_edge <= 192.0f) {
-			this->synapse_vector_hl1[i][1].input = (this->nearest_platform_edge / 96.0f - 1.0f) * -1.0f;
-		} else if (0.0f > this->nearest_platform_edge && this->nearest_platform_edge >= -192.0f) {
-			this->synapse_vector_hl1[i][1].input = (this->nearest_platform_edge / -96.0f - 1.0f) * -1.0f;
-		}
-
-		//Input of nearest_platform_distance
-		if (this->nearest_platform_distance > 256.0f || this->nearest_platform_distance < -256.0f) {
-			this->synapse_vector_hl1[i][2].input = -1.0f;
-		} else if (this->nearest_platform_distance == 0.0f) {
-			this->synapse_vector_hl1[i][2].input = 1.0f;
-		} else if (0.0f < this->nearest_platform_distance && this->nearest_platform_distance <= 256.0f) {
-			this->synapse_vector_hl1[i][2].input = (this->nearest_platform_distance / 128.0f - 1.0f) * -1.0f;
-		} else if (0.0f > this->nearest_platform_distance && this->nearest_platform_distance >= -256.0f) {
-			this->synapse_vector_hl1[i][2].input = (this->nearest_platform_distance / -128.0f - 1.0f) * -1.0f;
-		}
-
-		//Input of nearest_platform_beneath_distance
-		if (this->nearest_platform_beneath_distance > 512.0f) {
-			this->synapse_vector_hl1[i][3].input = -1.0f;
-		} else if (this->nearest_platform_beneath_distance == 0.0f) {
-			this->synapse_vector_hl1[i][3].input = 1.0f;
-		} else if (0.0f < this->nearest_platform_beneath_distance && this->nearest_platform_beneath_distance <= 512.0f) {
-			this->synapse_vector_hl1[i][3].input = (this->nearest_platform_beneath_distance / 256.0f - 1.0f) * -1.0f;
-		} else if (0.0f > this->nearest_platform_beneath_distance && this->nearest_platform_beneath_distance >= -512.0f) {
-			this->synapse_vector_hl1[i][3].input = (this->nearest_platform_beneath_distance / -256.0f - 1.0f) * -1.0f;
-		}
+		this->synapse_vector_hl1[i][input_pos].input = value;
 	}
 }
 

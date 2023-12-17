@@ -14,7 +14,7 @@ public:
 	void draw(ActorPlayer& player, std::vector<ActorAI>& ai_vector, MainCamera& camera) override;
 	SceneType setNextScene(ActorPlayer& player, std::vector<ActorAI>& ai_vector, bool& exitWindowRequested) override;
 
-	void drawBackground(MainCamera& camera);
+	void drawBackground(MainCamera& camera, std::vector<ActorAI>& ai_vector);
 	//void drawForeground(MainCamera& camera);
 
 	void parseLevelBackgroundTiles(nlohmann::json& tileset_description, nlohmann::json& level_map);
@@ -25,11 +25,11 @@ public:
 	void detectAICollision(ActorAI& ai);
 	void geneticAlgorithm(std::vector<ActorAI>& ai_vector);
 
-	Output findRightEdge(int iterator, float tile_position_x);
-
 private:
 
+	int death_counter = 0;
 	int temp_fitness = 0;
+	int best_fitness = 0;
 	int generation_time = 0;
 	int generation_counter = 0;
 

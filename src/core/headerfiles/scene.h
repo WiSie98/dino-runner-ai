@@ -21,6 +21,6 @@ private:
 
 protected:
 
-	SceneType scene_type;
+	SceneType scene_type = START_SCENE;
 
 };

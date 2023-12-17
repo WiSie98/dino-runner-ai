@@ -55,8 +55,13 @@ int main() {
 
         BeginDrawing();
             // You can draw on the screen between BeginDrawing() and EndDrawing()
+        if (sceneManager.getCurrentScene()->getSceneType() == START_SCENE) {
+            ClearBackground(WHITE);
+        } else {
             ClearBackground(BLACK);
-            sceneManager.draw(player, ai_vector, mainCamera);
+        }
+
+        sceneManager.draw(player, ai_vector, mainCamera);
 
         EndDrawing();
     } // Main game loop end

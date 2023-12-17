@@ -16,14 +16,13 @@ public:
 
 	float sigmoidFunction(float x);
 	float tanhFunction(float x);
+	void fillInputs(int input_pos, float value);
 
-	void setId(int id);
 	void setFitness(float fitness);
 	void setNearestPlatformEdge(float nearest_platform_edge);
 	void setNearestPlatformDistance(float nearest_platform_distance);
 	void setNearestPlatformBeneathDistance(float nearest_platform_beneath_distance);
 
-	int getId();
 	float getFitness();
 	float getNearestPlatformEdge();
 	float getNearestPlatformDistance();
@@ -35,7 +34,6 @@ public:
 private:
 
 	void activationFunction();
-	void fillInputs();
 	void aiMovement();
 
 protected:
